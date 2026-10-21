@@ -1,0 +1,65 @@
+{
+  "@@locale": "en",
+  "appTitle": "Route Simulator",
+  "routeTitle": "Route",
+  "presetCity": "City loop",
+  "presetHighway": "Highway (polyline)",
+  "routeSummary": "{km} km · {points} points · one lap {duration}",
+  "@routeSummary": {
+    "placeholders": {
+      "km": {"type": "String"},
+      "points": {"type": "int"},
+      "duration": {"type": "String"}
+    }
+  },
+  "settingsTitle": "Simulation",
+  "profileConstant": "Constant",
+  "profileRealistic": "Realistic",
+  "speedLabel": "Speed: {speed} km/h",
+  "@speedLabel": {
+    "placeholders": {"speed": {"type": "int"}}
+  },
+  "noiseLabel": "GPS noise: {meters} m",
+  "@noiseLabel": {
+    "placeholders": {"meters": {"type": "int"}}
+  },
+  "signalLoss": "Signal loss",
+  "jumps": "Multipath jumps",
+  "stopHalfway": "Stop 20 s halfway",
+  "loop": "Loop",
+  "playback": "Playback",
+  "start": "Start",
+  "pause": "Pause",
+  "resume": "Resume",
+  "stop": "Stop",
+  "stateIdle": "Ready",
+  "stateRunning": "Running",
+  "statePaused": "Paused",
+  "stateFinished": "Finished",
+  "liveTitle": "Live fix",
+  "speed": "Speed",
+  "accuracy": "Accuracy",
+  "heading": "Heading",
+  "distance": "Distance",
+  "lap": "Lap",
+  "fixes": "Fixes",
+  "noFixYet": "Press Start to begin the simulation.",
+  "trackTitle": "Track",
+  "trackLegend": "Grey: route · Blue: simulated fixes · Red: jumps",
+  "speedChartTitle": "Speed over time",
+  "logTitle": "Recent fixes",
+  "tagStopped": "stop",
+  "tagJump": "jump",
+  "exportGpx": "Export GPX",
+  "gpxDialogTitle": "GPX track ({count} points)",
+  "@gpxDialogTitle": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "copy": "Copy",
+  "close": "Close",
+  "copied": "GPX copied to the clipboard",
+  "seedLabel": "Seed {seed}",
+  "@seedLabel": {
+    "placeholders": {"seed": {"type": "int"}}
+  }
+}

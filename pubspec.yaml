@@ -1,6 +1,6 @@
 name: route_simulator
 description: "Pure Dart GPS route simulator: realistic fake location streams with speed profiles, stops, seeded noise, signal loss, a virtual clock, GPX export and emulator playback."
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/AbdurrahmanKaraoglu/RouteSimulator
 repository: https://github.com/AbdurrahmanKaraoglu/RouteSimulator
 issue_tracker: https://github.com/AbdurrahmanKaraoglu/RouteSimulator/issues

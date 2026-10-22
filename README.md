@@ -22,7 +22,7 @@ Pure Dart with **no runtime dependencies**: works in Flutter apps, on the server
 
 ```yaml
 dev_dependencies: # or dependencies, for an in-app demo mode
-  route_simulator: ^0.1.1
+  route_simulator: ^0.1.2
 ```
 
 ## Quick start
@@ -201,6 +201,22 @@ the emulator (CLI).
 - **No `dart:io` in the library.** The CLI lives in `bin/`; the pure helpers it uses are in
   `package:route_simulator/adb.dart`.
 
+## Other packages
+
+More packages by the same author:
+
+- [google_maps_polyline](https://pub.dev/packages/google_maps_polyline) — Google Directions routes and polyline encode/decode (pure Dart)
+- [marker_crafter](https://pub.dev/packages/marker_crafter) — Custom Google Maps markers drawn with Canvas
+- [animated_route_marker](https://pub.dev/packages/animated_route_marker) — Smoothly animated map marker along a route or live GPS
+- [advanced_background_locator](https://pub.dev/packages/advanced_background_locator) — Background location tracking plugin (Android/iOS)
+- [advanced_geofence](https://pub.dev/packages/advanced_geofence) — Pure Dart geofencing engine: enter, exit and dwell events
+- [background_doctor](https://pub.dev/packages/background_doctor) — Diagnoses why background work stops on Android and why the app was killed
+- [scan_tally](https://pub.dev/packages/scan_tally) — Continuous barcode scanning for stock counts: dedupe, tally, feedback, GS1
+- [scan_tally_mobile_scanner](https://pub.dev/packages/scan_tally_mobile_scanner) — mobile_scanner camera adapter for scan_tally
+- [turkish_kit](https://pub.dev/packages/turkish_kit) — Turkish validators, money in words, casing, provinces, holidays (pure Dart)
+- [turkish_kit_flutter](https://pub.dev/packages/turkish_kit_flutter) — Flutter widgets for turkish_kit: Turkish money field and input formatters
+- [flutter_toastify](https://pub.dev/packages/flutter_toastify) — Animated toast notifications
+
 ## Türkçe
 
 Konum uygulamalarını masa başında test etmek ve demo yapmak için bir rota boyunca gerçekçi sahte konum akışı üretir.
@@ -239,6 +255,22 @@ Saf Dart'tır ve **çalışma zamanı bağımlılığı yoktur**: Flutter uygula
 - **Bağımlılık kararı:** polyline çözücü pakete gömülüdür (~40 satır). `google_maps_polyline`'a bağlanmak
   simülatörün hiç kullanmadığı `http` ve Directions istemcisini getirirdi; algoritma standart olduğu için
   google_maps_polyline, Directions/Routes API ve OSRM polyline'ları doğrudan çalışır.
+
+### Diğer paketler
+
+Aynı geliştiricinin diğer paketleri:
+
+- [google_maps_polyline](https://pub.dev/packages/google_maps_polyline) — Google Directions rotası ve polyline kodlama/çözme (saf Dart)
+- [marker_crafter](https://pub.dev/packages/marker_crafter) — Canvas ile çizilen özel Google Maps işaretçileri
+- [animated_route_marker](https://pub.dev/packages/animated_route_marker) — Rota ya da canlı GPS üzerinde akıcı hareket eden harita işaretçisi
+- [advanced_background_locator](https://pub.dev/packages/advanced_background_locator) — Arka planda konum takibi eklentisi (Android/iOS)
+- [advanced_geofence](https://pub.dev/packages/advanced_geofence) — Saf Dart geofence motoru: giriş, çıkış ve bekleme olayları
+- [background_doctor](https://pub.dev/packages/background_doctor) — Android'de arka plan işinin neden durduğunu ve uygulamanın neden kapandığını teşhis eder
+- [scan_tally](https://pub.dev/packages/scan_tally) — Stok sayımı için sürekli barkod okutma: tekrar ayıklama, sayım, geri bildirim, GS1
+- [scan_tally_mobile_scanner](https://pub.dev/packages/scan_tally_mobile_scanner) — scan_tally için mobile_scanner kamera adaptörü
+- [turkish_kit](https://pub.dev/packages/turkish_kit) — Türkçe doğrulayıcılar, tutarı yazıyla yazma, harf dönüşümü, il/ilçe, tatiller (saf Dart)
+- [turkish_kit_flutter](https://pub.dev/packages/turkish_kit_flutter) — turkish_kit için Flutter bileşenleri: Türk biçimli para alanı ve girdi biçimleyicileri
+- [flutter_toastify](https://pub.dev/packages/flutter_toastify) — Animasyonlu toast bildirimleri
 
 ## License / Lisans
 

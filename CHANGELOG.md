@@ -1,3 +1,8 @@
+## 0.1.2
+
+* **DOCS (EN):** README lists the author's other packages (11 packages, English and Turkish sections).
+* **DOCS (TR):** README'de geliştiricinin diğer paketleri listelendi (11 paket, İngilizce ve Türkçe bölümler).
+
 ## 0.1.1
 
 * **EN:**

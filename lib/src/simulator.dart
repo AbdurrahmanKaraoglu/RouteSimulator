@@ -180,12 +180,15 @@ class RouteSimulator {
   }
 
   /// Noise-free location at [elapsed] simulated time.
-  SimulatedLocation truthAt(Duration elapsed) => _build(elapsed, withNoise: false)!;
+  ///
+  /// Timestamps are `startTime + elapsed`; without [startTime] the start of the current playback, or the current
+  /// time when the simulator has not been started.
+  SimulatedLocation truthAt(Duration elapsed) => _build(elapsed, withNoise: false, epoch: _currentEpoch())!;
 
   /// Location at [elapsed] simulated time, or `null` when it falls into a simulated signal loss.
   ///
   /// The result depends only on the settings and [elapsed], never on playback history.
-  SimulatedLocation? locationAt(Duration elapsed) => _build(elapsed, withNoise: true);
+  SimulatedLocation? locationAt(Duration elapsed) => _build(elapsed, withNoise: true, epoch: _currentEpoch());
 
   /// All locations from the start every [every] (default [interval]) of simulated time, skipping signal losses.
   ///
@@ -195,11 +198,12 @@ class RouteSimulator {
     if (step <= Duration.zero) throw ArgumentError.value(step, 'every', 'must be positive');
     if (loop && until == null) throw ArgumentError.notNull('until');
     final end = until ?? lapDuration;
+    final epoch = _currentEpoch(); // one epoch for the whole list, so timestamps are evenly spaced
     final out = <SimulatedLocation>[];
     var t = Duration.zero;
     while (true) {
       final reachedEnd = t >= end;
-      final loc = locationAt(reachedEnd ? end : t);
+      final loc = _build(reachedEnd ? end : t, withNoise: true, epoch: epoch);
       if (loc != null) out.add(loc);
       if (reachedEnd) break;
       t += step;
@@ -247,7 +251,9 @@ class RouteSimulator {
     if (!(rate > 0) || !rate.isFinite) throw ArgumentError.value(rate, 'playbackRate', 'must be positive');
   }
 
-  SimulatedLocation? _build(Duration elapsed, {required bool withNoise}) {
+  DateTime _currentEpoch() => _epoch ?? startTime ?? DateTime.now();
+
+  SimulatedLocation? _build(Duration elapsed, {required bool withNoise, required DateTime epoch}) {
     final total = elapsed.isNegative ? 0 : elapsed.inMicroseconds;
     final lapMicros = math.max(1, lapDuration.inMicroseconds);
     var lap = 0;
@@ -300,7 +306,12 @@ class RouteSimulator {
       accuracy = n.accuracy!;
     }
 
-    final epoch = _epoch ?? startTime ?? DateTime.now();
+    // While waiting at a vertex keep the heading of the arriving segment, not the next one.
+    var heading = pos.heading;
+    if (motion.isStopped && pos.segmentIndex > 0 && motion.distance <= route.distanceOfPoint(pos.segmentIndex)) {
+      heading = route.headingOfSegment(pos.segmentIndex - 1);
+    }
+
     return SimulatedLocation(
       latitude: point.latitude,
       longitude: point.longitude,
@@ -308,7 +319,7 @@ class RouteSimulator {
       altitude: altitude,
       speed: speed,
       speedAccuracy: withNoise ? n.speedError : 0,
-      heading: pos.heading,
+      heading: heading,
       time: epoch.add(Duration(microseconds: total)),
       provider: provider,
       elapsed: Duration(microseconds: total),

@@ -1,3 +1,25 @@
+## 0.1.1
+
+* **EN:**
+  * `generate()` uses one timestamp epoch for the whole list when `startTime` is not set (previously each fix read
+    the clock separately, so spacing could drift).
+  * While waiting at a route point, `heading` keeps the direction of the arriving segment instead of jumping to the
+    next one.
+  * New `selectEmulator()` in `package:route_simulator/adb.dart`; the emulator CLI uses it (same behaviour, now
+    unit-tested).
+  * Shorter pubspec description (pub.dev score), documented constructors, LICENSE copyright line fixed.
+  * README: "Used together" section (google_maps_polyline, advanced_background_locator, advanced_geofence,
+    animated_route_marker); notes on timestamps. Tests: GPX validated with an XML parser, README snippets compiled.
+* **TR:**
+  * `startTime` verilmediğinde `generate()` tüm liste için tek bir zaman başlangıcı kullanıyor (önceden her konum
+    saati ayrı okuyordu, aralıklar kayabiliyordu).
+  * Ara noktada beklerken `heading` sonraki segmente atlamıyor, gelinen yönü koruyor.
+  * `package:route_simulator/adb.dart` içinde yeni `selectEmulator()`; emülatör CLI'si bunu kullanıyor (davranış
+    aynı, artık birim testli).
+  * Daha kısa pubspec açıklaması (pub.dev puanı), belgelenmiş kurucular, LICENSE telif satırı düzeltildi.
+  * README: "Birlikte kullanım" bölümü ve zaman damgası notları. Testler: GPX bir XML ayrıştırıcıyla doğrulanıyor,
+    README örnekleri derleniyor.
+
 ## 0.1.0
 
 * First release. / İlk sürüm.

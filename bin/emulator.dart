@@ -312,23 +312,11 @@ Future<String> _selectDevice(String adb, String? requested) async {
   } on ProcessException catch (e) {
     throw _UsageException('could not run adb ($adb): ${e.message}. Use --adb <path>.');
   }
-  final devices = parseAdbDevices('${r.stdout}');
-  final emulators = devices.where((d) => d.isEmulator && d.isReady).toList();
-  if (requested != null) {
-    final match = devices.where((d) => d.serial == requested).firstOrNull;
-    if (match == null) throw _UsageException('device $requested not found. Connected: ${devices.join(', ')}');
-    if (!match.isEmulator) throw _UsageException('$requested is not an emulator; "emu geo fix" needs an emulator');
-    if (!match.isReady) throw _UsageException('$requested is ${match.state}');
-    return requested;
+  try {
+    return selectEmulator(parseAdbDevices('${r.stdout}'), requested: requested).serial;
+  } on StateError catch (e) {
+    throw _UsageException(e.message);
   }
-  if (emulators.isEmpty) throw _UsageException('no running emulator found (adb devices: ${devices.join(', ')})');
-  if (emulators.length > 1) {
-    throw _UsageException(
-      'several emulators are running (${emulators.map((d) => d.serial).join(', ')}); '
-      'choose one with --device',
-    );
-  }
-  return emulators.single.serial;
 }
 
 Future<String?> _avdName(String adb, String serial) async {

@@ -5,6 +5,7 @@ import 'route.dart';
 
 /// Noise-free kinematic state at a moment of one lap.
 class MotionState {
+  /// Creates a state; produced by the simulator.
   const MotionState({required this.distance, required this.speed, required this.isStopped});
 
   /// Distance from the start of the route in metres.

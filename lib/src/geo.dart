@@ -5,6 +5,7 @@ const double earthRadius = 6371008.8;
 
 /// A geographic coordinate with an optional altitude in metres.
 class GeoPoint {
+  /// Creates a point from [latitude] and [longitude] in degrees and an optional [altitude] in metres.
   const GeoPoint(this.latitude, this.longitude, {this.altitude});
 
   /// Latitude in degrees.

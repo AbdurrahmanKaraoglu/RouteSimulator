@@ -3,6 +3,7 @@ import 'dart:math' as math;
 /// GPS error model. All randomness is derived from [seed] and the sample time, so the same seed always produces
 /// the same output (also after `seek`, and on every platform including the web).
 class GpsNoise {
+  /// Creates an error model; every parameter has a realistic default for a phone in open sky.
   const GpsNoise({
     this.horizontalError = 3,
     this.altitudeError = 4,

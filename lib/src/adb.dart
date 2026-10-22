@@ -2,6 +2,7 @@ import 'location.dart';
 
 /// A line of `adb devices` output.
 class AdbDevice {
+  /// Creates a device entry; usually obtained from [parseAdbDevices].
   const AdbDevice(this.serial, this.state);
 
   /// Device serial, e.g. `emulator-5554`.
@@ -30,6 +31,30 @@ List<AdbDevice> parseAdbDevices(String output) {
     if (parts.length >= 2) devices.add(AdbDevice(parts[0], parts[1]));
   }
   return devices;
+}
+
+/// Picks the emulator to send fixes to, or throws [StateError] with a message to show the user.
+///
+/// With [requested] (a serial), that device must be listed, be an emulator and be ready. Without it, exactly one
+/// ready emulator must be running: the choice is never guessed when several are open, because other apps on them
+/// would receive the mock locations too. Real devices are never chosen (`emu geo fix` only works on emulators).
+AdbDevice selectEmulator(List<AdbDevice> devices, {String? requested}) {
+  final listed = devices.isEmpty ? 'none' : devices.join(', ');
+  if (requested != null) {
+    final match = devices.where((d) => d.serial == requested).firstOrNull;
+    if (match == null) throw StateError('device $requested not found (adb devices: $listed)');
+    if (!match.isEmulator) throw StateError('$requested is not an emulator; "emu geo fix" needs an emulator');
+    if (!match.isReady) throw StateError('$requested is ${match.state}');
+    return match;
+  }
+  final emulators = devices.where((d) => d.isEmulator && d.isReady).toList();
+  if (emulators.isEmpty) throw StateError('no running emulator found (adb devices: $listed)');
+  if (emulators.length > 1) {
+    throw StateError(
+      'several emulators are running (${emulators.map((d) => d.serial).join(', ')}); choose one with --device',
+    );
+  }
+  return emulators.single;
 }
 
 /// Arguments for `adb -s <serial> emu geo fix <longitude> <latitude> <altitude>`.

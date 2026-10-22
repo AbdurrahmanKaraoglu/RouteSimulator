@@ -3,6 +3,7 @@ import 'polyline.dart';
 
 /// A position on a [SimRoute].
 class RoutePosition {
+  /// Creates a position; produced by [SimRoute.positionAt].
   const RoutePosition({required this.point, required this.heading, required this.distance, required this.segmentIndex});
 
   /// The point on the route (altitude interpolated when the vertices have one).

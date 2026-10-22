@@ -22,7 +22,7 @@ Pure Dart with **no runtime dependencies**: works in Flutter apps, on the server
 
 ```yaml
 dev_dependencies: # or dependencies, for an in-app demo mode
-  route_simulator: ^0.1.0
+  route_simulator: ^0.1.1
 ```
 
 ## Quick start
@@ -97,7 +97,9 @@ final all = sim.generate(every: const Duration(milliseconds: 500)); // whole rou
 final fix = sim.locationAt(const Duration(minutes: 3)); // null during signal loss
 ```
 
-Pass `startTime` for deterministic timestamps.
+Pass `startTime` for deterministic timestamps. Without it, a playback is stamped from the moment `start()` is
+called (`clock` from `fake_async` is not used — timestamps come from `DateTime.now()`), and `generate()` uses one
+epoch for the whole list.
 
 ### Feeding your app
 
@@ -138,6 +140,35 @@ emulators running it refuses to guess: pass `--device emulator-5556`. Real devic
 (or a text file), `--demo`. `--dry-run` prints the `adb` commands, `--yes` skips the prompt (for scripts), `--help`
 lists everything (stops, loop, noise, seed, interval, adb path). Polylines often contain characters such as `|` or
 `` ` `` that shells (especially Windows `cmd`) interpret; put them in a file and use `--file route.txt`.
+
+## Used together
+
+route_simulator is part of a small family of packages; none of them depends on another.
+
+| Package | With route_simulator |
+|---|---|
+| [google_maps_polyline](https://pub.dev/packages/google_maps_polyline) | Fetch a real route, then simulate it: `SimRoute.fromEncodedPolyline(encodedPolyline)` (or `SimRoute(points.map((p) => GeoPoint(p.latitude, p.longitude)))`). |
+| [advanced_background_locator](https://pub.dev/packages/advanced_background_locator) | Feed your location callback without moving: `LocationDto.fromJson(location.toMap())`. |
+| [advanced_geofence](https://pub.dev/packages/advanced_geofence) | Drive enter/dwell/exit events at your desk (see below). |
+| [animated_route_marker](https://pub.dev/packages/animated_route_marker) | Move a map marker with simulated fixes: `controller.jumpTo(LatLng(l.latitude, l.longitude), bearing: l.heading)`. |
+
+Both route_simulator and advanced_geofence export a `GeoPoint`, so import one of them with a prefix:
+
+```dart
+import 'package:advanced_geofence/advanced_geofence.dart' as gf;
+import 'package:route_simulator/route_simulator.dart';
+
+final engine = gf.GeofenceEngine(
+  geofences: [gf.CircleGeofence(id: 'office', center: const gf.GeoPoint(41.0082, 28.9784), radius: 150)],
+  // Simulated timestamps may lie in the past or (with playbackRate > 1) in the future.
+  options: const gf.GeofenceOptions(maxReadingAge: null),
+);
+
+simulator.locations.listen((l) {
+  final result = engine.process(gf.GeoPoint(l.latitude, l.longitude, accuracy: l.accuracy, time: l.time));
+  for (final event in result.events) print('${event.type.name} ${event.geofenceId}');
+});
+```
 
 ## Why another one? Comparison
 
@@ -190,6 +221,14 @@ Saf Dart'tır ve **çalışma zamanı bağımlılığı yoktur**: Flutter uygula
   Belirlenimli zaman damgaları için `startTime` verin.
 - **Çıktı:** `SimulatedLocation.toMap()` advanced_background_locator'ın `LocationDto` anahtarlarıyla birebir aynıdır
   (`LocationDto.fromJson(konum.toMap())`), bağımlılık eklemez. `toGpx(konumlar)` GPX 1.1 izi üretir.
+- **Birlikte kullanım:** [google_maps_polyline](https://pub.dev/packages/google_maps_polyline) ile alınan rota
+  `SimRoute.fromEncodedPolyline` ile simüle edilir;
+  [advanced_background_locator](https://pub.dev/packages/advanced_background_locator) geri çağrısı
+  `LocationDto.fromJson(konum.toMap())` ile beslenir; [advanced_geofence](https://pub.dev/packages/advanced_geofence)
+  `engine.process(...)` ile giriş/bekleme/çıkış olayları masa başında üretilir (iki paket de `GeoPoint` dışa açtığı
+  için birini önekle içe aktarın, `GeofenceOptions(maxReadingAge: null)` kullanın);
+  [animated_route_marker](https://pub.dev/packages/animated_route_marker) işaretçisi
+  `controller.jumpTo(LatLng(...), bearing: konum.heading)` ile taşınır. Paketler birbirine bağımlı değildir.
 - **Emülatör:** `dart run route_simulator:emulator --demo --realistic --rate 5 --device emulator-5554`. Komut hedef
   cihazı (seri numarası ve AVD adı) gösterir ve göndermeden önce onay ister; birden fazla emülatör açıksa `--device`
   ister, gerçek cihazı reddeder. `--dry-run` komutları yalnızca yazdırır, `--yes` onayı atlar, `--help` tüm
